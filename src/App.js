@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/** @format */
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React from 'react';
+import './App.css';
+import { Textbox } from './components/textBox/textbox.jsx';
+import { List } from './components/list/list';
+
+class App extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			todo: [],
+		};
+	}
+
+	//Remove todo
+
+	handleOnClick = (index) => {
+		this.setState((prevstate) => {
+			return { todo: prevstate.todo.filter((element, i) => i !== index) };
+		});
+	};
+	handleKeyPressFun = (e) => {
+		console.log(e.key);
+		if (e.key === 'Enter') {
+			this.setState({
+				todo: [e.target.value, ...this.state.todo],
+			});
+			e.target.value = '';
+		}
+	};
+	render() {
+		const styles = { float: `right`, cursor: `pointer` };
+		return (
+			<div id="container">
+				<h1>
+					To-Do List <i style={styles} className="fa fa-plus"></i>
+				</h1>
+				<Textbox handleKeyPress={this.handleKeyPressFun} />
+				<List
+					value={this.state.todo}
+					handleOnClick={this.handleOnClick}
+				/>
+			</div>
+		);
+	}
 }
 
 export default App;
